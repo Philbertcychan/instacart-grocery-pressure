@@ -2,7 +2,7 @@
 
 A small analysis of Canadian grocery inflation and what it could mean for grocery delivery demand — built as a self-directed project alongside an application to Instacart's Strategic Finance team.
 
-**[View the live dashboard →](#)** *(replace with your GitHub Pages URL once deployed)*
+**[View the live dashboard →](https://philbertcychan.github.io/instacart-grocery-pressure/)** 
 
 ## The hypothesis
 
