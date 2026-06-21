@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Price Pressure — Canada CPI Tracker</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="dashboard_data.js"></script>
+<style>
+  :root {
+    --bg: #0E1116;
+    --panel: #161B22;
+    --panel-border: #242C36;
+    --text: #E8E6E1;
+    --text-dim: #8A93A1;
+    --hot: #D9824B;
+    --cool: #7FA889;
+    --neutral: #5B7A99;
+    --accent-line: #2A3441;
+    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neutral);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 650;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .subhead {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 680px;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .meta-row span b { color: var(--text); font-weight: 600; }
+
+  section { margin-bottom: 44px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--neutral);
+    margin: 0 0 14px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 24px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  canvas { max-width: 100%; }
+
+  .chart-title {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: 0 0 16px;
+    font-family: var(--mono);
+  }
+
+  /* Category comparison rows */
+  .compare-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 70px;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--accent-line);
+    font-size: 13px;
+  }
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-label {
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .bar-track {
+    height: 8px;
+    background: var(--accent-line);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  .compare-value {
+    font-family: var(--mono);
+    text-align: right;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* Elasticity picker */
+  .picker-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .picker-btn {
+    background: var(--bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    padding: 7px 13px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .picker-btn:hover { border-color: var(--neutral); color: var(--text); }
+  .picker-btn.active {
+    background: var(--neutral);
+    border-color: var(--neutral);
+    color: #0E1116;
+    font-weight: 600;
+  }
+
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 700px) {
+    .scenario-grid { grid-template-columns: 1fr; }
+  }
+
+  .scenario-card {
+    background: var(--bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 18px;
+  }
+
+  .scenario-card .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .scenario-card .value {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .scenario-card .elasticity {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .worked-example {
+    margin-top: 22px;
+    padding: 16px 18px;
+    background: var(--bg);
+    border-left: 3px solid var(--hot);
+    border-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .worked-example b { color: var(--hot); }
+
+  .caveat {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--panel-border);
+  }
+
+  .caveat b { color: var(--text); }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--panel-border);
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    line-height: 1.7;
+  }
+
+  footer a { color: var(--neutral); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Grocery price pressure tracker</p>
+    <h1>Where Canadian grocery inflation is concentrated</h1>
+    <p class="subhead">
+      Instacart's business sits on top of grocery spend — basket size, order frequency,
+      and willingness to pay a delivery markup all respond to how much pressure
+      shoppers feel at checkout. This tracks that pressure directly from Statistics
+      Canada price data, then applies published demand-elasticity research to estimate
+      what it could mean for volume.
+    </p>
+    <div class="meta-row">
+      <span>Data through <b id="meta-date">—</b></span>
+      <span>Source: <b>StatCan Table 18-10-0004-01</b></span>
+      <span><b id="meta-months">—</b> months of history</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="section-label">Price trend, last 5 years</p>
+    <div class="panel">
+      <p class="chart-title">CPI index value by category (2002 = 100)</p>
+      <canvas id="trendChart" height="100"></canvas>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">Where the pressure is concentrated</p>
+    <div class="panel">
+      <p class="chart-title">Year-over-year price change, latest month, sorted highest to lowest</p>
+      <div id="compareList"></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">Implied demand impact</p>
+    <div class="panel">
+      <p class="chart-title">Pick a category — scenarios use published Canadian food price elasticity estimates</p>
+      <div class="picker-row" id="categoryPicker"></div>
+      <div class="scenario-grid" id="scenarioCards"></div>
+      <div class="worked-example" id="workedExample"></div>
+      <div class="caveat">
+        <b>What this is and isn't:</b> elasticity estimates come from a peer-reviewed
+        study of Canadian food demand (AIDS model, 2006/07 and 2009/10 survey data),
+        not from Instacart-specific data. The "high" scenario uses poultry's published
+        elasticity as a general upper bound for price-sensitive categories — it is not
+        a category-specific estimate for every item shown. Treat these as illustrative
+        ranges for how demand <i>could</i> respond, not a validated forecast.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Built with public data — Statistics Canada CPI (Table 18-10-0004-01) and
+    Canadian food price elasticity research (PMC, AIDS model 2006/07 &amp; 2009/10).
+    Independent analysis, not affiliated with Instacart or Statistics Canada.
+  </footer>
+
+</div>
+
+<script>
+const DATA = DASHBOARD_DATA;
+
+const CATEGORY_COLORS = {
+  'Meat': '#D9824B',
+  'Other food products and non-alcoholic beverages': '#C97B6E',
+  'Vegetables and vegetable preparations': '#C9A24B',
+  'Food purchased from stores': '#E8E6E1',
+  'Fish, seafood and other marine products': '#7FA8B8',
+  'Bakery and cereal products (excluding baby food)': '#9B8FB8',
+  'Dairy products and eggs': '#7FA889',
+  'Fruit, fruit preparations and nuts': '#6FA37F'
+};
+
+const SHORT_NAMES = {
+  'Bakery and cereal products (excluding baby food)': 'Bakery & cereal',
+  'Dairy products and eggs': 'Dairy & eggs',
+  'Fish, seafood and other marine products': 'Fish & seafood',
+  'Food purchased from stores': 'All groceries (aggregate)',
+  'Fruit, fruit preparations and nuts': 'Fruit',
+  'Meat': 'Meat',
+  'Other food products and non-alcoholic beverages': 'Other food & drinks',
+  'Vegetables and vegetable preparations': 'Vegetables'
+};
+
+// ---- Header meta ----
+document.getElementById('meta-date').textContent = DATA.meta.last_updated;
+const anyCategory = Object.values(DATA.trend)[0];
+document.getElementById('meta-months').textContent = anyCategory.length;
+
+// ---- Trend chart ----
+const categories = Object.keys(DATA.trend);
+const labels = DATA.trend['Meat'].map(d => d.date);
+
+const datasets = categories.map(cat => ({
+  label: SHORT_NAMES[cat],
+  data: DATA.trend[cat].map(d => d.index_value),
+  borderColor: CATEGORY_COLORS[cat],
+  backgroundColor: 'transparent',
+  borderWidth: cat === 'Food purchased from stores' ? 2.5 : 1.5,
+  pointRadius: 0,
+  tension: 0.15,
+}));
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: { labels, datasets },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: '#8A93A1', font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 14 }
+      },
+      tooltip: {
+        backgroundColor: '#161B22',
+        borderColor: '#242C36',
+        borderWidth: 1,
+        titleColor: '#E8E6E1',
+        bodyColor: '#E8E6E1',
+        titleFont: { family: 'JetBrains Mono', size: 11 },
+        bodyFont: { family: 'JetBrains Mono', size: 11 }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#8A93A1', font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 10 },
+        grid: { color: '#1B212A' }
+      },
+      y: {
+        ticks: { color: '#8A93A1', font: { family: 'JetBrains Mono', size: 10 } },
+        grid: { color: '#1B212A' }
+      }
+    }
+  }
+});
+
+// ---- Category comparison bars ----
+const compareList = document.getElementById('compareList');
+const latestYoy = categories.map(cat => {
+  const series = DATA.trend[cat];
+  const latest = series[series.length - 1];
+  return { cat, yoy: latest.yoy_pct_change };
+}).sort((a, b) => b.yoy - a.yoy);
+
+const maxAbsYoy = Math.max(...latestYoy.map(d => Math.abs(d.yoy)));
+
+latestYoy.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'compare-row';
+  const widthPct = (Math.abs(d.yoy) / maxAbsYoy) * 100;
+  const color = CATEGORY_COLORS[d.cat];
+  row.innerHTML = `
+    <div class="compare-label">${SHORT_NAMES[d.cat]}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${widthPct}%; background:${color}"></div></div>
+    <div class="compare-value" style="color:${color}">${d.yoy > 0 ? '+' : ''}${d.yoy.toFixed(1)}%</div>
+  `;
+  compareList.appendChild(row);
+});
+
+// ---- Elasticity picker ----
+const picker = document.getElementById('categoryPicker');
+const scenarioCards = document.getElementById('scenarioCards');
+const workedExample = document.getElementById('workedExample');
+
+let activeCategory = 'Meat';
+
+function renderScenarios(cat) {
+  const s = DATA.scenarios[cat];
+  scenarioCards.innerHTML = '';
+
+  const scenarioMeta = [
+    { key: 'low', label: 'Low / conservative', color: 'var(--cool)' },
+    { key: 'base', label: 'Base case', color: 'var(--neutral)' },
+    { key: 'high', label: 'High / aggressive', color: 'var(--hot)' }
+  ];
+
+  scenarioMeta.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'scenario-card';
+    const v = s[m.key];
+    card.innerHTML = `
+      <div class="label" style="color:${m.color}">${m.label}</div>
+      <div class="value" style="color:${m.color}">${v.implied_demand_change_pct > 0 ? '+' : ''}${v.implied_demand_change_pct.toFixed(2)}%</div>
+      <div class="elasticity">elasticity = ${v.elasticity}</div>
+    `;
+    scenarioCards.appendChild(card);
+  });
+
+  workedExample.innerHTML = `
+    <b>${SHORT_NAMES[cat]}</b> prices are up <b>${s.yoy_price_change_pct > 0 ? '+' : ''}${s.yoy_price_change_pct.toFixed(2)}%</b>
+    year-over-year as of ${s.latest_date}. Applying the base-case elasticity estimate
+    (${s.base.elasticity}), that implies a roughly <b>${s.base.implied_demand_change_pct.toFixed(2)}%</b>
+    demand pullback in this category — with a plausible range from
+    ${s.low.implied_demand_change_pct.toFixed(2)}% (low) to ${s.high.implied_demand_change_pct.toFixed(2)}% (high)
+    depending on how price-sensitive this specific basket turns out to be.
+  `;
+}
+
+categories.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.className = 'picker-btn' + (cat === activeCategory ? ' active' : '');
+  btn.textContent = SHORT_NAMES[cat];
+  btn.addEventListener('click', () => {
+    activeCategory = cat;
+    document.querySelectorAll('.picker-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderScenarios(cat);
+  });
+  picker.appendChild(btn);
+});
+
+renderScenarios(activeCategory);
+</script>
+
+</body>
+</html>
