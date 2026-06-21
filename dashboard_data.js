@@ -3110,16 +3110,16 @@ const DASHBOARD_DATA = {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 7.39,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -1.63
+        "elasticity": -0.65,
+        "implied_demand_change_pct": -4.8
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -3.25
+        "elasticity": -0.932,
+        "implied_demand_change_pct": -6.89
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -13.16
+        "elasticity": -2.639,
+        "implied_demand_change_pct": -19.5
       }
     },
     "Fruit, fruit preparations and nuts": {
@@ -3221,7 +3221,8 @@ const DASHBOARD_DATA = {
   },
   "meta": {
     "source": "Statistics Canada, Table 18-10-0004-01, Consumer Price Index, monthly, not seasonally adjusted",
-    "elasticity_source": "Canadian food price elasticities by income level (AIDS model, 2006/07 and 2009/10 survey data, PMC)",
-    "last_updated": "2026-04"
+    "last_updated": "2026-04",
+    "elasticity_source_meat": "Diakite (2024), Estimating Demand for Lamb, Beef, Pork, and Poultry in Canada -- national-level Marshallian own-price elasticities, 2019-2022 Nielsen retail data.",
+    "elasticity_source_other": "Ni Mhurchu et al. (2013), Food Prices and Consumer Demand: Differences across Income Levels and Ethnic Groups (PLoS ONE) -- New Zealand AIDS model, 2006/07 and 2009/10 survey data."
   }
 };

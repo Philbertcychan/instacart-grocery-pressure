@@ -302,12 +302,15 @@
       <div class="scenario-grid" id="scenarioCards"></div>
       <div class="worked-example" id="workedExample"></div>
       <div class="caveat">
-        <b>What this is and isn't:</b> elasticity estimates come from a peer-reviewed
-        study of Canadian food demand (AIDS model, 2006/07 and 2009/10 survey data),
-        not from Instacart-specific data. The "high" scenario uses poultry's published
-        elasticity as a general upper bound for price-sensitive categories — it is not
-        a category-specific estimate for every item shown. Treat these as illustrative
-        ranges for how demand <i>could</i> respond, not a validated forecast.
+        <b>What this is and isn't:</b> for <b>Meat</b>, elasticity scenarios use real
+        Canadian estimates (Diakité, 2024 — beef, poultry, and lamb own-price elasticities
+        from 2019–2022 national retail data). Lamb's estimate is the least statistically
+        stable of the three and is used here only as an upper bound, not a precise
+        prediction. For the other 7 categories, scenarios use a broader range from a
+        peer-reviewed New Zealand food-demand study (AIDS model, 2006/07 and 2009/10
+        survey data) as the closest available published proxy — not Canadian or
+        Instacart-specific data. Treat all of these as illustrative ranges for how
+        demand <i>could</i> respond, not a validated forecast.
       </div>
     </div>
   </section>
@@ -432,7 +435,13 @@ function renderScenarios(cat) {
   const s = DATA.scenarios[cat];
   scenarioCards.innerHTML = '';
 
-  const scenarioMeta = [
+  const isMeat = cat === 'Meat';
+
+  const scenarioMeta = isMeat ? [
+    { key: 'low', label: 'Beef-equivalent', color: 'var(--cool)' },
+    { key: 'base', label: 'Poultry-equivalent (base)', color: 'var(--neutral)' },
+    { key: 'high', label: 'Lamb-equivalent (volatile)', color: 'var(--hot)' }
+  ] : [
     { key: 'low', label: 'Low / conservative', color: 'var(--cool)' },
     { key: 'base', label: 'Base case', color: 'var(--neutral)' },
     { key: 'high', label: 'High / aggressive', color: 'var(--hot)' }
@@ -450,12 +459,16 @@ function renderScenarios(cat) {
     scenarioCards.appendChild(card);
   });
 
+  const sourceNote = isMeat
+    ? 'using Canadian national-level meat demand estimates (Diakité, 2024)'
+    : 'using New Zealand food-demand elasticity estimates (Ni Mhurchu et al., 2013) as a published proxy';
+
   workedExample.innerHTML = `
     <b>${SHORT_NAMES[cat]}</b> prices are up <b>${s.yoy_price_change_pct > 0 ? '+' : ''}${s.yoy_price_change_pct.toFixed(2)}%</b>
     year-over-year as of ${s.latest_date}. Applying the base-case elasticity estimate
-    (${s.base.elasticity}), that implies a roughly <b>${s.base.implied_demand_change_pct.toFixed(2)}%</b>
+    (${s.base.elasticity}, ${sourceNote}), that implies a roughly <b>${s.base.implied_demand_change_pct.toFixed(2)}%</b>
     demand pullback in this category — with a plausible range from
-    ${s.low.implied_demand_change_pct.toFixed(2)}% (low) to ${s.high.implied_demand_change_pct.toFixed(2)}% (high)
+    ${s.low.implied_demand_change_pct.toFixed(2)}% to ${s.high.implied_demand_change_pct.toFixed(2)}%
     depending on how price-sensitive this specific basket turns out to be.
   `;
 }

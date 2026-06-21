@@ -2,7 +2,7 @@
 
 A small analysis of Canadian grocery inflation and what it could mean for grocery delivery demand — built as a self-directed project alongside an application to Instacart's Strategic Finance team.
 
-**[View the live dashboard →](https://philbertcychan.github.io/instacart-grocery-pressure/)**
+**[View the live dashboard →](#)** *(replace with your GitHub Pages URL once deployed)*
 
 ## The hypothesis
 
@@ -19,15 +19,17 @@ This project tracks that pressure directly from government price data, then appl
 ## Data sources
 
 - **Price data**: Statistics Canada, [Table 18-10-0004-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000401), *Consumer Price Index, monthly, not seasonally adjusted*. Covers "Food purchased from stores" and its 7 published sub-categories, January 2021 through April 2026.
-- **Elasticity estimates**: a peer-reviewed study of Canadian food demand using an Almost Ideal Demand System (AIDS) model on 2006/07 and 2009/10 survey data, which estimated own-price elasticities across food categories (range: −0.22 to −1.78 depending on category).
+- **Elasticity estimates, Meat**: Diakité (2024), *Estimating Demand for Lamb, Beef, Pork, and Poultry in Canada* — national-level own-price elasticities for beef, poultry, and lamb, derived from 2019–2022 Canadian retail (Nielsen) data.
+- **Elasticity estimates, other categories**: Ni Mhurchu et al. (2013), *Food Prices and Consumer Demand: Differences across Income Levels and Ethnic Groups*, PLoS ONE — an Almost Ideal Demand System (AIDS) model using New Zealand household survey data from 2006/07 and 2009/10. Used here as the closest available published proxy for categories without a Canadian-specific estimate.
 
 ## Methodology notes — what this is and isn't
 
 This is an illustrative model, not a validated forecast, and I want to be upfront about where the estimates are doing real work versus where they're a reasonable proxy:
 
-- The elasticity figures come from general Canadian food-demand research, **not from Instacart-specific or delivery-specific data**. Grocery delivery demand likely responds differently than in-store grocery demand — probably with some added sensitivity, since delivery is a discretionary layer on top of an already-rising cost — but I don't have data to quantify that gap, so I haven't tried to.
-- The "high" scenario uses the most price-elastic *named* category in the source study (poultry, −1.78) as a general upper bound across all categories shown, not as a category-specific estimate for everything. It's meant to express "how bad could this get if a category is unusually price-sensitive," not a precise prediction.
-- This is a snapshot, refreshed manually from a one-time data pull (latest data: April 2026), not a live-updating feed. Statistics Canada releases new CPI data monthly; this dashboard would need a manual or automated refresh to stay current.
+- **Meat** uses real Canadian data: beef's elasticity (−0.65) as the conservative scenario, poultry's (−0.93) as the base case (the most statistically reliable of the three), and lamb's (−2.64) as an upper bound — flagged explicitly as the least stable estimate in the source study, since lamb consumption in Canada is comparatively low-volume and volatile.
+- **All other categories** (dairy, vegetables, bakery, fruit, fish, etc.) use the New Zealand study's range (−0.22 to −1.78) as a proxy, since I could not find a published Canadian-specific elasticity for these categories at this level of detail. This is a real limitation, not a Canadian estimate dressed up as one — and it's stated as such directly in the dashboard.
+- None of these elasticity figures are specific to **grocery delivery** demand (as opposed to in-store grocery demand). Delivery demand likely carries some additional price sensitivity on top of general food demand, since it's a discretionary layer on top of an already-rising cost, but I don't have data to quantify that gap, so I haven't tried to.
+- This is a snapshot, refreshed manually from a one-time data pull (latest data: April 2026), not a live-updating feed.
 
 ## Why this approach
 
