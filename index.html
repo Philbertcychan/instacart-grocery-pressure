@@ -302,15 +302,16 @@
       <div class="scenario-grid" id="scenarioCards"></div>
       <div class="worked-example" id="workedExample"></div>
       <div class="caveat">
-        <b>What this is and isn't:</b> for <b>Meat</b>, elasticity scenarios use real
-        Canadian estimates (Diakité, 2024 — beef, poultry, and lamb own-price elasticities
-        from 2019–2022 national retail data). Lamb's estimate is the least statistically
-        stable of the three and is used here only as an upper bound, not a precise
-        prediction. For the other 7 categories, scenarios use a broader range from a
-        peer-reviewed New Zealand food-demand study (AIDS model, 2006/07 and 2009/10
-        survey data) as the closest available published proxy — not Canadian or
-        Instacart-specific data. Treat all of these as illustrative ranges for how
-        demand <i>could</i> respond, not a validated forecast.
+        <b>What this is and isn't:</b> all elasticity estimates are now Canadian.
+        <b>Meat</b> uses recent national retail data (Diakité, 2024 — beef, poultry,
+        and lamb own-price elasticities from 2019–2022). The other 7 categories use
+        a Government of Canada study (Pomboza &amp; Mbaga, 2007, Agriculture and
+        Agri-Food Canada) based on 2001 household survey data — fully Canadian, but
+        older. Where that study reports two related food groups (e.g. bakery and
+        cereal), the range shown spans both; where it reports one, low/base/high
+        collapse to a single value. Treat all of these as illustrative ranges for
+        how demand <i>could</i> respond, not a validated forecast — none of these
+        studies measure grocery <i>delivery</i> demand specifically.
       </div>
     </div>
   </section>
@@ -461,7 +462,7 @@ function renderScenarios(cat) {
 
   const sourceNote = isMeat
     ? 'using Canadian national-level meat demand estimates (Diakité, 2024)'
-    : 'using New Zealand food-demand elasticity estimates (Ni Mhurchu et al., 2013) as a published proxy';
+    : 'using Government of Canada food-demand elasticity estimates (Pomboza & Mbaga, 2007, AAFC)';
 
   workedExample.innerHTML = `
     <b>${SHORT_NAMES[cat]}</b> prices are up <b>${s.yoy_price_change_pct > 0 ? '+' : ''}${s.yoy_price_change_pct.toFixed(2)}%</b>

@@ -3094,16 +3094,16 @@ const DASHBOARD_DATA = {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 3.81,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.84
+        "elasticity": -0.45,
+        "implied_demand_change_pct": -1.71
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -1.68
+        "elasticity": -0.65,
+        "implied_demand_change_pct": -2.48
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -6.78
+        "elasticity": -0.9,
+        "implied_demand_change_pct": -3.43
       }
     },
     "Meat": {
@@ -3126,96 +3126,96 @@ const DASHBOARD_DATA = {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 0.85,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.19
+        "elasticity": -0.84,
+        "implied_demand_change_pct": -0.71
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -0.38
+        "elasticity": -0.84,
+        "implied_demand_change_pct": -0.71
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -1.52
+        "elasticity": -0.84,
+        "implied_demand_change_pct": -0.71
       }
     },
     "Fish, seafood and other marine products": {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 3.09,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.68
+        "elasticity": -0.1,
+        "implied_demand_change_pct": -0.31
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -1.36
+        "elasticity": -0.1,
+        "implied_demand_change_pct": -0.31
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -5.51
+        "elasticity": -0.1,
+        "implied_demand_change_pct": -0.31
       }
     },
     "Dairy products and eggs": {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 1.36,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.3
+        "elasticity": -0.35,
+        "implied_demand_change_pct": -0.48
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -0.6
+        "elasticity": -0.6175,
+        "implied_demand_change_pct": -0.84
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -2.43
+        "elasticity": -0.88,
+        "implied_demand_change_pct": -1.2
       }
     },
     "Bakery and cereal products (excluding baby food)": {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 2.02,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.45
+        "elasticity": -0.43,
+        "implied_demand_change_pct": -0.87
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -0.89
+        "elasticity": -0.57,
+        "implied_demand_change_pct": -1.15
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -3.6
+        "elasticity": -0.71,
+        "implied_demand_change_pct": -1.43
       }
     },
     "Other food products and non-alcoholic beverages": {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 5.04,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -1.11
+        "elasticity": -1.03,
+        "implied_demand_change_pct": -5.19
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -2.22
+        "elasticity": -1.085,
+        "implied_demand_change_pct": -5.47
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -8.96
+        "elasticity": -1.14,
+        "implied_demand_change_pct": -5.75
       }
     },
     "Vegetables and vegetable preparations": {
       "latest_date": "2026-04",
       "yoy_price_change_pct": 4.03,
       "low": {
-        "elasticity": -0.22,
-        "implied_demand_change_pct": -0.89
+        "elasticity": -0.65,
+        "implied_demand_change_pct": -2.62
       },
       "base": {
-        "elasticity": -0.44,
-        "implied_demand_change_pct": -1.77
+        "elasticity": -0.65,
+        "implied_demand_change_pct": -2.62
       },
       "high": {
-        "elasticity": -1.78,
-        "implied_demand_change_pct": -7.17
+        "elasticity": -0.65,
+        "implied_demand_change_pct": -2.62
       }
     }
   },
@@ -3223,6 +3223,6 @@ const DASHBOARD_DATA = {
     "source": "Statistics Canada, Table 18-10-0004-01, Consumer Price Index, monthly, not seasonally adjusted",
     "last_updated": "2026-04",
     "elasticity_source_meat": "Diakite (2024), Estimating Demand for Lamb, Beef, Pork, and Poultry in Canada -- national-level Marshallian own-price elasticities, 2019-2022 Nielsen retail data.",
-    "elasticity_source_other": "Ni Mhurchu et al. (2013), Food Prices and Consumer Demand: Differences across Income Levels and Ethnic Groups (PLoS ONE) -- New Zealand AIDS model, 2006/07 and 2009/10 survey data."
+    "elasticity_source_other": "Pomboza and Mbaga (2007), The Estimation of Food Demand Elasticities in Canada, Agriculture and Agri-Food Canada -- modified AIDS model, 2001 Food Expenditure Survey (FOODEX) data."
   }
 };
